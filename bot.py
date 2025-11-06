@@ -1,7 +1,26 @@
 import os
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from threading import Thread
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+# Health check server
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b'OK')
+    
+    def log_message(self, format, *args):
+        pass  # Disable logging for health checks
+
+def run_health_server():
+    port = int(os.getenv('PORT', 8000))
+    server = HTTPServer(('0.0.0.0', port), HealthHandler)
+    logging.info(f"Health check server running on port {port}")
+    server.serve_forever()
 
 # Configure logging
 logging.basicConfig(
@@ -72,6 +91,8 @@ class CoachDBot:
             await self.show_technical_menu(query)
         elif data == "main_links":
             await self.show_other_links(query)
+        elif data == "main_back":
+            await self.send_welcome_message(update, context)
 
     async def show_plans_flow(self, query):
         """Show plans and programs flow"""
@@ -228,7 +249,13 @@ class CoachDBot:
         await query.edit_message_text(text, reply_markup=reply_markup)
 
     def run(self):
-        """Start the bot"""
+        """Start the bot and health server"""
+        # Start health server in a separate thread
+        health_thread = Thread(target=run_health_server, daemon=True)
+        health_thread.start()
+        
+        # Start the bot
+        logger.info("Bot is starting...")
         self.application.run_polling()
 
 def main():
@@ -241,7 +268,6 @@ def main():
 
     # Create and run bot
     bot = CoachDBot(bot_token)
-    logger.info("Bot is starting...")
     bot.run()
 
 if __name__ == '__main__':
