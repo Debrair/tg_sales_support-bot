@@ -2,16 +2,20 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy requirements and install dependencies
+# Install dependencies first for better caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy bot code
+# Copy application code
 COPY bot.py .
 
-# Create non-root user
-RUN useradd -m -r botuser && chown -R botuser /app
+# Create non-root user for security
+RUN useradd -m -r botuser && \
+    chown -R botuser:botuser /app
 USER botuser
 
-# Start the bot
+# Health check (optional but recommended)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000', timeout=2)" || exit 1
+
 CMD ["python", "bot.py"]
