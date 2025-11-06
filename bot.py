@@ -114,13 +114,13 @@ class CoachDBot:
         data = query.data
 
         if data == "plans_no_brochures":
-            text = (
-                "Entendido. Aquí tienes los detalles de nuestros servicios principales para que puedas revisarlos:\n\n"
-                "* Plan On-Demand: [https://drive.google.com/file/d/1eah6l5FGKRSNFqNuTlSNqCdAIjVNsoxQ/view]\n"
-                "* Programa Intensivo de Control de Peso: [https://drive.google.com/file/d/1GqjntjQktb6H48nR9JG-2wmjfnVqJs0g/view]\n\n"
-                "Tómate tu tiempo para leerlos. Si tienes dudas después, simplemente escribe 'Ayuda'."
-            )
-            keyboard = [[InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]]
+            text = "Entendido. Aquí tienes los detalles de nuestros servicios principales. Haz clic en los botones para ver los folletos:"
+            
+            keyboard = [
+                [InlineKeyboardButton("📋 Plan On-Demand", url="https://drive.google.com/file/d/1eah6l5FGKRSNFqNuTlSNqCdAIjVNsoxQ/view")],
+                [InlineKeyboardButton("⚖️ Programa Intensivo de Control de Peso", url="https://drive.google.com/file/d/1GqjntjQktb6H48nR9JG-2wmjfnVqJs0g/view")],
+                [InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]
+            ]
             
         elif data == "plans_human":
             text = "Perfecto, por favor espera un momento y un asesor te atenderá para resolver todas tus dudas. (Transferencia a humano)"
@@ -149,8 +149,11 @@ class CoachDBot:
         data = query.data
 
         if data == "payments_no_tutorial":
-            text = "¡No hay problema! Puedes ver el tutorial completo y realizar tu pago de forma segura en este enlace: [https://www.coachdmethod.com/checkout-on-demand.html]"
-            keyboard = [[InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]]
+            text = "¡No hay problema! Haz clic en el botón para ver el tutorial completo y realizar tu pago de forma segura:"
+            keyboard = [
+                [InlineKeyboardButton("🎥 Ver Tutorial de Pago", url="https://www.coachdmethod.com/checkout-on-demand.html")],
+                [InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]
+            ]
             
         elif data == "payments_human":
             text = "Comprendo. Por favor espera un momento y un miembro del equipo te asistirá con el pago. (Transferencia a humano)"
@@ -161,14 +164,7 @@ class CoachDBot:
 
     async def show_technical_menu(self, query):
         """Show technical support menu"""
-        text = (
-            "Estamos para ayudarte con la parte técnica. Por favor, indícanos qué tipo de asistencia necesitas.\n\n"
-            "1. Ayuda conectando dispositivos\n"
-            "2. Ayuda sincronizando MyFitnessPal\n"
-            "3. Ayuda navegando la aplicación\n"
-            "4. Problemas para acceder a mi cuenta\n"
-            "5. Reportar un inconveniente / error"
-        )
+        text = "Estamos para ayudarte con la parte técnica. Por favor, indícanos qué tipo de asistencia necesitas."
         
         keyboard = [
             [InlineKeyboardButton("1. Ayuda conectando dispositivos", callback_data="tech_devices")],
@@ -190,12 +186,18 @@ class CoachDBot:
         data = query.data
 
         if data == "tech_devices":
-            text = "Aquí tienes la guía para conectar dispositivos: [https://coachdmethod.helpsite.com/articles/134459-como-conectar-fitbit-a-la-aplicacion]"
-            keyboard = [[InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]]
+            text = "Aquí tienes la guía para conectar dispositivos Fitbit:"
+            keyboard = [
+                [InlineKeyboardButton("📱 Conectar Fitbit a la App", url="https://coachdmethod.helpsite.com/articles/134459-como-conectar-fitbit-a-la-aplicacion")],
+                [InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]
+            ]
             
         elif data == "tech_myfitnesspal":
-            text = "Aquí tienes la guía para sincronizar MyFitnessPal: [https://coachdmethod.helpsite.com/articles/134448-solucion-de-problemas-myfitnesspal-no-se-sincroniza]"
-            keyboard = [[InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]]
+            text = "Aquí tienes la guía para solucionar problemas de sincronización con MyFitnessPal:"
+            keyboard = [
+                [InlineKeyboardButton("🔄 Sincronizar MyFitnessPal", url="https://coachdmethod.helpsite.com/articles/134448-solucion-de-problemas-myfitnesspal-no-se-sincroniza")],
+                [InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]
+            ]
             
         elif data == "tech_app_nav":
             text = "Perfecto. Tenemos un video de demostración que explica cómo usar todas las funciones de la aplicación. ¿Ya lo has visto?"
@@ -210,8 +212,11 @@ class CoachDBot:
             keyboard = [[InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]]
             
         elif data == "tech_report":
-            text = "Puedes reportar el inconveniente o error aquí: [https://coachdmethod.helpsite.com/contact]"
-            keyboard = [[InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]]
+            text = "Haz clic para reportar un inconveniente o error:"
+            keyboard = [
+                [InlineKeyboardButton("📝 Reportar Problema", url="https://coachdmethod.helpsite.com/contact")],
+                [InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]
+            ]
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         await query.edit_message_text(text, reply_markup=reply_markup)
@@ -224,8 +229,11 @@ class CoachDBot:
         data = query.data
 
         if data == "app_nav_no_video":
-            text = "Aquí tienes el video de demostración: [https://coachdmethod.helpsite.com/articles/134447-introduccion-a-la-aplicacion]"
-            keyboard = [[InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]]
+            text = "Aquí tienes el video de demostración de la aplicación:"
+            keyboard = [
+                [InlineKeyboardButton("🎬 Ver Video de la App", url="https://coachdmethod.helpsite.com/articles/134447-introduccion-a-la-aplicacion")],
+                [InlineKeyboardButton("← Volver a Soporte Técnico", callback_data="main_technical")]
+            ]
             
         elif data == "app_nav_human":
             text = "Por favor espera un momento y un asesor te ayudará con la navegación de la aplicación. (Transferencia a humano)"
@@ -236,14 +244,14 @@ class CoachDBot:
 
     async def show_other_links(self, query):
         """Show other links"""
-        text = (
-            "Aquí tienes nuestros enlaces de interés:\n\n"
-            "* Pagina web: [https://www.coachdmethod.com]\n"
-            "* Página de Contacto: [https://coachdmethod.helpsite.com/contact]\n"
-            "* Centro de Ayuda: [https://coachdmethod.helpsite.com/categories/31935-support]"
-        )
+        text = "Aquí tienes nuestros enlaces de interés:"
         
-        keyboard = [[InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]]
+        keyboard = [
+            [InlineKeyboardButton("🌐 Página Web", url="https://www.coachdmethod.com")],
+            [InlineKeyboardButton("📞 Página de Contacto", url="https://coachdmethod.helpsite.com/contact")],
+            [InlineKeyboardButton("❓ Centro de Ayuda", url="https://coachdmethod.helpsite.com/categories/31935-support")],
+            [InlineKeyboardButton("← Volver al Menú Principal", callback_data="main_back")]
+        ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await query.edit_message_text(text, reply_markup=reply_markup)
