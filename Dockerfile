@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy bot code
+COPY bot.py .
+
+# Create non-root user
+RUN useradd -m -r botuser && chown -R botuser /app
+USER botuser
+
+# Start the bot
+CMD ["python", "bot.py"]
